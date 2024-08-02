@@ -23,7 +23,7 @@ async function main() {
 	const { schemaPath, port, modelId } = parseArgs();
 	const apiKey = process.env.OPENAI_API_KEY as string;
 
-	const schema = await loadSchema(schemaPath);
+	const schema = await loadSchema(path.join(process.cwd(), schemaPath));
 	const model = createModel(modelId, apiKey);
 	await generateObjects(schema, model);
 	const generated = loadGeneratedObjects();
