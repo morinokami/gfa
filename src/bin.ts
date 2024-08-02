@@ -1,8 +1,14 @@
 #!/usr/bin/env node
 
+import * as fs from "node:fs";
+import * as path from "node:path";
+import * as url from "node:url";
 import { serve } from "@hono/node-server";
+import type { LanguageModel } from "ai";
 import { Hono } from "hono";
 import * as z from "zod";
+
+import type { Schema } from ".";
 import { createApi } from "./api";
 import {
 	createModel,
@@ -10,100 +16,106 @@ import {
 	generateSingleObject,
 } from "./gen";
 
-// TODO: Load schema
-const schema = {
-	posts: {
-		single: false,
-		prompt: "Generate 3 posts",
-		shape: z.object({
-			id: z.number(),
-			title: z.string(),
-			views: z.number(),
-		}),
-	},
-	comments: {
-		single: false,
-		prompt: "Generate 5 comments. postIds should be between 1 and 3",
-		shape: z.object({
-			id: z.number(),
-			text: z.string(),
-			postId: z.number(),
-		}),
-	},
-	profile: {
-		single: true,
-		prompt: "Generate a profile",
-		shape: z.object({
-			name: z.string(),
-		}),
-	},
-};
+const __filename = url.fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-// TODO: Generate objects if not already generated
-const model = createModel("gpt-4o-mini", "x");
-for (const [key, value] of Object.entries(schema)) {
-	console.log(key);
-	const generate = value.single
-		? generateSingleObject
-		: generateMultipleObjects;
-	const object = await generate({
-		model,
-		// @ts-expect-error
-		schema: value.shape,
-		prompt: value.prompt,
+async function main() {
+	// TODO: Read command line arguments
+	const port = 3333;
+	const modelId = "gpt-4o-mini";
+	const schemaPath = "TODO";
+	const apiKey = process.env.OPENAI_API_KEY as string;
+
+	const schema = loadSchema(schemaPath);
+	const model = createModel(modelId, apiKey);
+	await generateObjects(schema, model);
+	const generated = loadGeneratedObjects();
+	const app = createApp(generated);
+
+	console.log(`Serving API on http://localhost:${port}`);
+	serve({
+		fetch: app.fetch,
+		port,
 	});
-	console.log(object);
+}
+main();
+
+function loadSchema(path: string) {
+	// TODO: Load schema from a file
+	const schema = {
+		posts: {
+			single: false,
+			prompt: "Generate 3 posts",
+			shape: z.object({
+				id: z.number(),
+				title: z.string(),
+				views: z.number(),
+			}),
+		},
+		comments: {
+			single: false,
+			prompt: "Generate 5 comments. postIds should be between 1 and 3",
+			shape: z.object({
+				id: z.number(),
+				text: z.string(),
+				postId: z.number(),
+			}),
+		},
+		profile: {
+			single: true,
+			prompt: "Generate a profile",
+			shape: z.object({
+				name: z.string(),
+			}),
+		},
+	};
+
+	return schema as Schema;
 }
 
-// TODO: Load generated objects
-const generated = {
-	posts: [
-		{ id: 1, title: "Exploring the Wonders of Nature", views: 150 },
-		{
-			id: 2,
-			title: "The Future of Technology: Trends to Watch",
-			views: 200,
-		},
-		{
-			id: 3,
-			title: "Healthy Eating: Tips for a Balanced Diet",
-			views: 120,
-		},
-	],
-	comments: [
-		{
-			id: 1,
-			text: "This is a great post! Really enjoyed reading it.",
-			postId: 1,
-		},
-		{
-			id: 2,
-			text: "I completely agree with your point of view.",
-			postId: 2,
-		},
-		{ id: 3, text: "Thanks for sharing this information!", postId: 1 },
-		{
-			id: 4,
-			text: "Interesting perspective, I hadn't thought of it that way.",
-			postId: 3,
-		},
-		{
-			id: 5,
-			text: "Looking forward to more posts like this!",
-			postId: 2,
-		},
-	],
-	profile: { name: "John Doe" },
-};
+async function generateObjects(schema: Schema, model: LanguageModel) {
+	if (!fs.existsSync(path.resolve(__dirname, "generated.json"))) {
+		console.log("Generating objects...");
+		const generated: Record<string, unknown> = {};
 
-const app = new Hono();
+		for (const [key, value] of Object.entries(schema)) {
+			const generate = value.single
+				? generateSingleObject
+				: generateMultipleObjects;
+			const object = await generate({
+				model,
+				schema: value.shape,
+				prompt: value.prompt,
+			});
+			generated[key] = object;
+		}
 
-for (const [key, value] of Object.entries(generated)) {
-	const api = createApi(key);
-	app.route("/", api);
+		fs.writeFileSync(
+			path.resolve(__dirname, "generated.json"),
+			JSON.stringify(generated, null, 2),
+			"utf-8",
+		);
+	} else {
+		console.log("Objects already generated.");
+	}
 }
 
-serve({
-	fetch: app.fetch,
-	port: 3333,
-});
+function loadGeneratedObjects() {
+	const generated = fs.readFileSync(
+		path.resolve(__dirname, "generated.json"),
+		"utf-8",
+	);
+
+	return JSON.parse(generated) as Record<string, unknown>;
+}
+
+function createApp(data: Record<string, unknown>) {
+	const app = new Hono();
+
+	for (const [key, value] of Object.entries(data)) {
+		const api = createApi(key);
+		app.route("/", api);
+	}
+
+	return app;
+}

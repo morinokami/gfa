@@ -4,7 +4,6 @@ import type { OpenAIChatModelId } from "@ai-sdk/openai/internal";
 import type { LanguageModel } from "ai";
 import { generateObject } from "ai";
 import * as z from "zod";
-import type { ZodObject, ZodRawShape } from "zod";
 
 export function createModel(
 	modelId: OpenAIChatModelId,
@@ -14,17 +13,17 @@ export function createModel(
 	return openai(modelId);
 }
 
-interface GenerateOptions<T extends ZodRawShape> {
+interface GenerateOptions {
 	model: LanguageModel;
-	schema: ZodObject<T>;
+	schema: z.SomeZodObject;
 	prompt?: string;
 }
 
-export async function generateSingleObject<T extends ZodRawShape>({
+export async function generateSingleObject({
 	model,
 	schema,
 	prompt,
-}: GenerateOptions<T>) {
+}: GenerateOptions) {
 	const { object } = await generateObject({
 		model,
 		schema,
@@ -33,11 +32,11 @@ export async function generateSingleObject<T extends ZodRawShape>({
 	return object;
 }
 
-export async function generateMultipleObjects<T extends ZodRawShape>({
+export async function generateMultipleObjects({
 	model,
 	schema,
 	prompt,
-}: GenerateOptions<T>) {
+}: GenerateOptions) {
 	const { object } = await generateObject({
 		model,
 		schema: z.object({ result: z.array(schema) }),
