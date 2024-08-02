@@ -9,13 +9,10 @@
 		"type": "git",
 		"url": "git+https://github.com/morinokami/gen-api.git"
 	},
-	"keywords": [
-		"TODO"
-	],
+	"keywords": ["TODO"],
+	"packageManager": "pnpm@9.6.0",
 	"types": "dist/index.d.ts",
-	"files": [
-		"dist"
-	],
+	"files": ["dist"],
 	"bin": "dist/bin.js",
 	"scripts": {
 		"dev": "tsx watch src/bin.ts ../fixtures/schema.ts",
