@@ -9,9 +9,13 @@
 		"type": "git",
 		"url": "git+https://github.com/morinokami/gen-api.git"
 	},
-	"keywords": ["TODO"],
+	"keywords": [
+		"TODO"
+	],
 	"types": "dist/index.d.ts",
-	"files": ["dist"],
+	"files": [
+		"dist"
+	],
 	"bin": "dist/bin.js",
 	"scripts": {
 		"dev": "tsx watch src/bin.ts ../fixtures/schema.ts",
@@ -22,6 +26,7 @@
 		"@biomejs/biome": "1.8.3",
 		"@tsconfig/recommended": "1.0.7",
 		"@types/node": "22.0.2",
+		"pkg-pr-new": "^0.0.19",
 		"tsx": "4.16.3",
 		"typescript": "5.5.4"
 	},
