@@ -6,6 +6,7 @@ import * as url from "node:url";
 import { serve } from "@hono/node-server";
 import type { LanguageModel } from "ai";
 import { Hono } from "hono";
+import meow from "meow";
 
 import { Schema } from ".";
 import { createApi } from "./api";
@@ -19,10 +20,7 @@ const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 async function main() {
-	// TODO: Read command line arguments
-	const port = 3333;
-	const modelId = "gpt-4o-mini";
-	const schemaPath = "../schema.ts";
+	const { schemaPath, port, modelId } = parseArgs();
 	const apiKey = process.env.OPENAI_API_KEY as string;
 
 	const schema = await loadSchema(schemaPath);
@@ -38,6 +36,46 @@ async function main() {
 	});
 }
 main();
+
+function parseArgs() {
+	const defaultPort = 3000;
+	const defaultModelId = "gpt-4o-mini";
+	const help = `
+	Usage: npx gen-api [options] schema.ts
+
+	Options:
+	  -p, --port    Port to serve the API on (default: ${defaultPort})
+	  -m, --modelId OpenAI model ID to use (default: ${defaultModelId})
+`;
+	const cli = meow(help, {
+		importMeta: import.meta,
+		booleanDefault: undefined,
+		description: false,
+		flags: {
+			port: {
+				type: "number",
+				default: defaultPort,
+				shortFlag: "p",
+			},
+			modelId: {
+				type: "string",
+				default: defaultModelId,
+				shortFlag: "m",
+			},
+		},
+	});
+
+	if (cli.input.length !== 1) {
+		cli.showHelp();
+		process.exit(1);
+	}
+
+	return {
+		schemaPath: cli.input[0],
+		port: cli.flags.port,
+		modelId: cli.flags.modelId,
+	};
+}
 
 async function loadSchema(path: string) {
 	const schema = await import(path);

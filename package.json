@@ -14,8 +14,8 @@
 	"files": ["dist"],
 	"bin": "dist/bin.js",
 	"scripts": {
-		"dev": "tsx watch src/bin.ts",
-		"build": "tsc",
+		"dev": "tsx watch src/bin.ts ../fixtures/schema.ts",
+		"build": "rm -rf dist && tsc",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"devDependencies": {
@@ -30,6 +30,7 @@
 		"@hono/node-server": "1.12.0",
 		"ai": "3.2.41",
 		"hono": "4.5.3",
+		"meow": "^13.2.0",
 		"zod": "3.23.8"
 	}
 }
