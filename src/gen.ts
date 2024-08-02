@@ -3,19 +3,26 @@ import { createOpenAI } from "@ai-sdk/openai";
 import type { OpenAIChatModelId } from "@ai-sdk/openai/internal";
 import type { LanguageModel } from "ai";
 import { generateObject } from "ai";
-import * as z from "zod";
+import { z } from "zod";
 
 export function createModel(
 	modelId: OpenAIChatModelId,
 	apiKey: string,
 ): ReturnType<OpenAIProvider> {
 	const openai = createOpenAI({ apiKey });
+
 	return openai(modelId);
 }
 
 interface GenerateOptions {
 	model: LanguageModel;
-	schema: z.SomeZodObject;
+	schema: z.ZodObject<
+		z.ZodRawShape,
+		z.UnknownKeysParam,
+		z.ZodTypeAny,
+		unknown,
+		unknown
+	>;
 	prompt?: string;
 }
 
@@ -29,6 +36,7 @@ export async function generateSingleObject({
 		schema,
 		prompt,
 	});
+
 	return object;
 }
 
@@ -42,5 +50,6 @@ export async function generateMultipleObjects({
 		schema: z.object({ result: z.array(schema) }),
 		prompt,
 	});
+
 	return object.result;
 }

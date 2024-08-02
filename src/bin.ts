@@ -6,9 +6,8 @@ import * as url from "node:url";
 import { serve } from "@hono/node-server";
 import type { LanguageModel } from "ai";
 import { Hono } from "hono";
-import * as z from "zod";
 
-import type { Schema } from ".";
+import { Schema } from ".";
 import { createApi } from "./api";
 import {
 	createModel,
@@ -23,10 +22,10 @@ async function main() {
 	// TODO: Read command line arguments
 	const port = 3333;
 	const modelId = "gpt-4o-mini";
-	const schemaPath = "TODO";
+	const schemaPath = "../schema.ts";
 	const apiKey = process.env.OPENAI_API_KEY as string;
 
-	const schema = loadSchema(schemaPath);
+	const schema = await loadSchema(schemaPath);
 	const model = createModel(modelId, apiKey);
 	await generateObjects(schema, model);
 	const generated = loadGeneratedObjects();
@@ -40,37 +39,15 @@ async function main() {
 }
 main();
 
-function loadSchema(path: string) {
-	// TODO: Load schema from a file
-	const schema = {
-		posts: {
-			single: false,
-			prompt: "Generate 3 posts",
-			shape: z.object({
-				id: z.number(),
-				title: z.string(),
-				views: z.number(),
-			}),
-		},
-		comments: {
-			single: false,
-			prompt: "Generate 5 comments. postIds should be between 1 and 3",
-			shape: z.object({
-				id: z.number(),
-				text: z.string(),
-				postId: z.number(),
-			}),
-		},
-		profile: {
-			single: true,
-			prompt: "Generate a profile",
-			shape: z.object({
-				name: z.string(),
-			}),
-		},
-	};
+async function loadSchema(path: string) {
+	const schema = await import(path);
+	const parseResult = Schema.safeParse(schema.default);
+	if (!parseResult.success) {
+		console.error("Failed to parse schema file");
+		process.exit(1);
+	}
 
-	return schema as Schema;
+	return parseResult.data;
 }
 
 async function generateObjects(schema: Schema, model: LanguageModel) {

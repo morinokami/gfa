@@ -1,9 +1,11 @@
-import type { SomeZodObject } from "zod";
+import { z } from "zod";
 
-export interface Schema {
-	[key: string]: {
-		single: boolean;
-		shape: SomeZodObject;
-		prompt?: string;
-	};
-}
+export const Schema = z.record(
+	z.object({
+		single: z.boolean().optional(),
+		shape: z.instanceof(z.ZodObject),
+		prompt: z.string().optional(),
+	}),
+);
+
+export type Schema = z.infer<typeof Schema>;
