@@ -121,14 +121,19 @@ function loadGeneratedObjects() {
 		"utf-8",
 	);
 
-	return JSON.parse(generated) as Record<string, unknown>;
+	return JSON.parse(generated) as Record<
+		string,
+		Array<unknown> | Record<string, unknown>
+	>;
 }
 
-function createApp(data: Record<string, unknown>) {
+function createApp(
+	data: Record<string, Array<unknown> | Record<string, unknown>>,
+) {
 	const app = new Hono();
 
 	for (const [key, value] of Object.entries(data)) {
-		const api = createApi(key);
+		const api = createApi(key, value);
 		app.route("/", api);
 	}
 
