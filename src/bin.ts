@@ -8,13 +8,13 @@ import type { LanguageModel } from "ai";
 import { Hono } from "hono";
 import meow from "meow";
 
-import { Schema } from ".";
-import { createApi } from "./api";
+import { createApi } from "./api.js";
 import {
 	createModel,
 	generateMultipleObjects,
 	generateSingleObject,
-} from "./gen";
+} from "./gen.js";
+import { Schema } from "./index.js";
 
 const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

@@ -4,8 +4,8 @@
 	"exclude": ["src/**/*.test.ts"],
 	"compilerOptions": {
 		"target": "ESNext",
-		"module": "ESNext",
-		"moduleResolution": "Bundler",
+		"module": "Node16",
+		"moduleResolution": "Node16",
 		"outDir": "./dist",
 		"declaration": true
 	}
