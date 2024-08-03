@@ -1,11 +1,13 @@
-name: Publish Pull Request
+name: Integrity Checks
 
 on:
+  push:
+    branches: ["main"]
   pull_request:
     branches: ["main"]
 
 jobs:
-  build:
+  validate:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -21,8 +23,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Run Biome check command
+        run: pnpm dlx @biomejs/biome check
+
       - name: Build
         run: pnpm build
 
-      - name: Publish
-        run: pnpm dlx pkg-pr-new publish
+      - name: Run publint
+        run: pnpm dlx publint
