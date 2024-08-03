@@ -9,7 +9,7 @@
 		"type": "git",
 		"url": "git+https://github.com/morinokami/gen-api.git"
 	},
-	"keywords": ["TODO"],
+	"keywords": ["api", "ai", "llm"],
 	"packageManager": "pnpm@9.6.0",
 	"types": "dist/index.d.ts",
 	"files": ["dist"],
