@@ -21,8 +21,8 @@ const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 async function main() {
-	const { schemaPath, port, modelId, basePath } = parseArgs();
-	const apiKey = process.env.OPENAI_API_KEY as string;
+	const { schemaPath, port, modelId, basePath } = parseArgs(); // TODO: Check if port is valid and available
+	const apiKey = process.env.OPENAI_API_KEY as string; // TODO: Check if API key is set
 
 	const schema = await loadSchema(path.join(process.cwd(), schemaPath));
 	const model = createModel(modelId, apiKey);
