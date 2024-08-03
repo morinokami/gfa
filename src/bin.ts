@@ -77,6 +77,7 @@ function parseArgs() {
 	};
 }
 
+// TODO: Support loading from a TS file
 async function loadSchema(path: string) {
 	const schema = await import(path);
 	const parseResult = Schema.safeParse(schema.default);
