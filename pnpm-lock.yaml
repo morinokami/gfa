@@ -37,7 +37,7 @@ importers:
         specifier: 22.0.2
         version: 22.0.2
       pkg-pr-new:
-        specifier: ^0.0.19
+        specifier: 0.0.19
         version: 0.0.19
       tsx:
         specifier: 4.16.3
