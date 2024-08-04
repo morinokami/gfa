@@ -69,7 +69,6 @@ export function parseArgs() {
 	};
 }
 
-// TODO: Support loading from a TS file
 export async function loadSchema(path: string) {
 	let schemaObj = {};
 	if (path.endsWith(".ts")) {
