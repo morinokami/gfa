@@ -1,5 +1,3 @@
-// TODO: Add tests
-
 import * as fs from "node:fs";
 import * as path from "node:path";
 import * as url from "node:url";
@@ -76,8 +74,7 @@ export async function loadSchema(path: string) {
 	const parseResult = Schema.safeParse(schema.default);
 	if (!parseResult.success) {
 		// TODO: Show error details
-		console.error("Failed to parse schema file");
-		process.exit(1);
+		throw new Error("Failed to parse schema file");
 	}
 
 	return parseResult.data;
