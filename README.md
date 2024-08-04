@@ -1,5 +1,7 @@
 # gen-api
 
+TODO: Add description
+
 LLM-powered [json-server](https://github.com/typicode/json-server)
 
 ```sh

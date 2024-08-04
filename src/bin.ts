@@ -21,6 +21,7 @@ async function main() {
 	const schema = await loadSchema(path.join(process.cwd(), schemaPath));
 	const model = createModel(modelId, apiKey);
 	if (!generatedFileExists() || regenerate) {
+		// TODO: Show spinner?
 		console.log("Generating resources...");
 		await generateResources(schema, model);
 	}
