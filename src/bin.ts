@@ -2,10 +2,10 @@
 
 import * as path from "node:path";
 import { serve } from "@hono/node-server";
+import chalk from "chalk";
 import { showRoutes } from "hono/dev";
 import ora from "ora";
 
-import { styleText } from "node:util";
 import {
 	createApp,
 	generateResources,
@@ -26,7 +26,7 @@ async function main() {
 		const spinner = ora("Generating resources...").start();
 		await generateResources(schema, model);
 		spinner.stopAndPersist({
-			symbol: styleText("green", "✔"),
+			symbol: chalk.green("✔"),
 			text: "Resources generated\n",
 		});
 	}

@@ -4,6 +4,7 @@ import * as url from "node:url";
 import type { LanguageModel } from "ai";
 import { Hono } from "hono";
 import meow from "meow";
+import { createServer } from "vite";
 
 import { createApi } from "./api.js";
 import { generateMultipleObjects, generateSingleObject } from "./gen.js";
@@ -68,13 +69,21 @@ export function parseArgs() {
 	};
 }
 
-// TODO: Support loading from a TS file
 export async function loadSchema(path: string) {
-	const schema = await import(path);
-	if (schema.default === undefined) {
+	let schemaObj = {};
+	if (path.endsWith(".ts")) {
+		const viteServer = await createServer({});
+		const module = await viteServer.ssrLoadModule(path);
+		schemaObj = module.default;
+	} else {
+		const schema = await import(path);
+		schemaObj = schema.default;
+	}
+	if (schemaObj === undefined) {
 		throw new Error("Schema file must default export object");
 	}
-	const parseResult = Schema.safeParse(schema.default);
+
+	const parseResult = Schema.safeParse(schemaObj);
 	if (!parseResult.success) {
 		throw new Error(
 			`Failed to parse schema file: ${JSON.stringify(
