@@ -3,7 +3,9 @@
 import * as path from "node:path";
 import { serve } from "@hono/node-server";
 import { showRoutes } from "hono/dev";
+import ora from "ora";
 
+import { styleText } from "node:util";
 import {
 	createApp,
 	generateResources,
@@ -21,9 +23,12 @@ async function main() {
 	const schema = await loadSchema(path.join(process.cwd(), schemaPath));
 	const model = createModel(modelId, apiKey);
 	if (!generatedFileExists() || regenerate) {
-		// TODO: Show spinner?
-		console.log("Generating resources...");
+		const spinner = ora("Generating resources...").start();
 		await generateResources(schema, model);
+		spinner.stopAndPersist({
+			symbol: styleText("green", "✔"),
+			text: "Resources generated\n",
+		});
 	}
 	const generated = loadGeneratedResources();
 	const app = createApp(generated, basePath);
