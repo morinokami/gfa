@@ -21,12 +21,12 @@ const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 async function main() {
-	const { schemaPath, port, modelId, basePath } = parseArgs(); // TODO: Check if port is valid and available
+	const { schemaPath, port, modelId, basePath, regenerate } = parseArgs(); // TODO: Check if port is valid and available
 	const apiKey = process.env.OPENAI_API_KEY as string; // TODO: Check if API key is set
 
 	const schema = await loadSchema(path.join(process.cwd(), schemaPath));
 	const model = createModel(modelId, apiKey);
-	await generateObjects(schema, model);
+	await generateObjects(schema, model, regenerate);
 	const generated = loadGeneratedObjects();
 	const app = createApp(generated, basePath);
 
@@ -54,6 +54,7 @@ function parseArgs() {
 	  -p, --port    Port to serve the API on (default: ${defaultPort})
 	  -m, --modelId OpenAI model ID to use (default: ${defaultModelId})
 	  --basePath    Base path for the API (default: ${defaultBasePath})
+	  --regenerate  Regenerate the generated objects
 `;
 	const cli = meow(help, {
 		importMeta: import.meta,
@@ -74,6 +75,10 @@ function parseArgs() {
 				type: "string",
 				default: defaultBasePath,
 			},
+			regenerate: {
+				type: "boolean",
+				default: false,
+			},
 		},
 	});
 
@@ -87,6 +92,7 @@ function parseArgs() {
 		port: cli.flags.port,
 		modelId: cli.flags.modelId,
 		basePath: cli.flags.basePath,
+		regenerate: cli.flags.regenerate,
 	};
 }
 
@@ -103,8 +109,12 @@ async function loadSchema(path: string) {
 	return parseResult.data;
 }
 
-async function generateObjects(schema: Schema, model: LanguageModel) {
-	if (!fs.existsSync(path.resolve(__dirname, "generated.json"))) {
+async function generateObjects(
+	schema: Schema,
+	model: LanguageModel,
+	regenerate: boolean,
+) {
+	if (!fs.existsSync(path.resolve(__dirname, "generated.json")) || regenerate) {
 		console.log("Generating objects...");
 		const generated: Record<string, unknown> = {};
 
