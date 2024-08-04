@@ -9,11 +9,11 @@ export function createApi(
 	const route = path.join("/", basePath, resource);
 
 	return Array.isArray(data)
-		? createEndpointsForMultipleResources(route, data)
-		: createEndpointsForSingleResource(route, data);
+		? createMultipleItemEndoiubts(route, data)
+		: createSingleItemEndpoints(route, data);
 }
 
-function createEndpointsForSingleResource(
+function createSingleItemEndpoints(
 	route: string,
 	data: Record<string, unknown>,
 ) {
@@ -41,7 +41,7 @@ function createEndpointsForSingleResource(
 	return api;
 }
 
-function createEndpointsForMultipleResources(
+function createMultipleItemEndoiubts(
 	route: string,
 	data: Array<Record<string, unknown>>,
 ) {
