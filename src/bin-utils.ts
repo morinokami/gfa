@@ -71,10 +71,18 @@ export function parseArgs() {
 // TODO: Support loading from a TS file
 export async function loadSchema(path: string) {
 	const schema = await import(path);
+	if (schema.default === undefined) {
+		throw new Error("Schema file must default export object");
+	}
 	const parseResult = Schema.safeParse(schema.default);
 	if (!parseResult.success) {
-		// TODO: Show error details
-		throw new Error("Failed to parse schema file");
+		throw new Error(
+			`Failed to parse schema file: ${JSON.stringify(
+				parseResult.error.format(),
+				null,
+				2,
+			)}`,
+		);
 	}
 
 	return parseResult.data;
