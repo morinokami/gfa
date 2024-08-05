@@ -78,3 +78,26 @@ GET     /api/profile
 PUT     /api/profile
 PATCH   /api/profile
 ```
+
+The API is now running on `http://localhost:3000`. You can make requests to the API using `curl` or a tool like [Postman](https://www.postman.com/). Here is an example request using `curl`:
+
+```
+$ curl -s http://localhost:3000/api/posts | jq .
+[
+  {
+    "id": 1,
+    "title": "Exploring the Wonders of Nature",
+    "views": 150
+  },
+  {
+    "id": 2,
+    "title": "The Future of Technology: Trends to Watch",
+    "views": 200
+  },
+  {
+    "id": 3,
+    "title": "Healthy Eating: Tips for a Balanced Diet",
+    "views": 120
+  }
+]
+```
