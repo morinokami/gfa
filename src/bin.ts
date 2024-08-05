@@ -17,8 +17,12 @@ import {
 import { createModel } from "./gen.js";
 
 async function main() {
-	const { schemaPath, port, modelId, basePath, regenerate } = parseArgs(); // TODO: Check if port is valid and available
-	const apiKey = process.env.OPENAI_API_KEY as string; // TODO: Check if API key is set
+	const { schemaPath, port, modelId, basePath, regenerate } = parseArgs();
+	const apiKey = process.env.OPENAI_API_KEY;
+	if (!apiKey) {
+		console.error("Error: OPENAI_API_KEY environment variable must be set");
+		process.exit(1);
+	}
 
 	const schema = await loadSchema(path.join(process.cwd(), schemaPath));
 	const model = createModel(modelId, apiKey);
