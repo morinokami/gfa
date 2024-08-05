@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import type { Seed } from "../dist";
+import type { Seed } from "..";
 
 export default {
 	posts: {
