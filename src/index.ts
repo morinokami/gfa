@@ -1,11 +1,11 @@
 import { z } from "zod";
 
-export const Schema = z.record(
+export const Seed = z.record(
 	z.object({
 		single: z.boolean().optional(),
-		shape: z.instanceof(z.ZodObject),
+		schema: z.instanceof(z.ZodObject),
 		prompt: z.string().optional(),
 	}),
 );
 
-export type Schema = z.infer<typeof Schema>;
+export type Seed = z.infer<typeof Seed>;

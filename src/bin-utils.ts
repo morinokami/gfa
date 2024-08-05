@@ -8,7 +8,7 @@ import { createServer } from "vite";
 
 import { createApi } from "./api.js";
 import { generateMultipleObjects, generateSingleObject } from "./gen.js";
-import { Schema } from "./index.js";
+import { Seed } from "./index.js";
 
 const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -21,7 +21,7 @@ export function parseArgs() {
 	const defaultBasePath = "/api";
 	const defaultRegenerate = false;
 	const help = `
-	Usage: npx gen-api [options] schema.ts
+	Usage: npx gen-api [options] seed.ts
 
 	Options:
 	  -p, --port    Port to serve the API on (default: ${defaultPort})
@@ -61,7 +61,7 @@ export function parseArgs() {
 	}
 
 	return {
-		schemaPath: cli.input[0],
+		seedPath: cli.input[0],
 		port: cli.flags.port,
 		modelId: cli.flags.modelId,
 		basePath: cli.flags.basePath,
@@ -69,24 +69,24 @@ export function parseArgs() {
 	};
 }
 
-export async function loadSchema(path: string) {
-	let schemaObj = {};
+export async function loadSeed(path: string) {
+	let seedObj = {};
 	if (path.endsWith(".ts")) {
 		const viteServer = await createServer({});
 		const module = await viteServer.ssrLoadModule(path);
-		schemaObj = module.default;
+		seedObj = module.default;
 	} else {
-		const schema = await import(path);
-		schemaObj = schema.default;
+		const seed = await import(path);
+		seedObj = seed.default;
 	}
-	if (schemaObj === undefined) {
-		throw new Error("Schema file must default export object");
+	if (seedObj === undefined) {
+		throw new Error("Seed file must default export object");
 	}
 
-	const parseResult = Schema.safeParse(schemaObj);
+	const parseResult = Seed.safeParse(seedObj);
 	if (!parseResult.success) {
 		throw new Error(
-			`Failed to parse schema file: ${JSON.stringify(
+			`Failed to parse seed file: ${JSON.stringify(
 				parseResult.error.format(),
 				null,
 				2,
@@ -101,16 +101,16 @@ export function generatedFileExists() {
 	return fs.existsSync(path.resolve(__dirname, GENERATED_FILE));
 }
 
-export async function generateResources(schema: Schema, model: LanguageModel) {
+export async function generateResources(seed: Seed, model: LanguageModel) {
 	const generated: Record<string, unknown> = {};
 
-	for (const [key, value] of Object.entries(schema)) {
+	for (const [key, value] of Object.entries(seed)) {
 		const generate = value.single
 			? generateSingleObject
 			: generateMultipleObjects;
 		const object = await generate({
 			model,
-			schema: value.shape,
+			schema: value.schema,
 			prompt: value.prompt,
 		});
 		generated[key] = object;
