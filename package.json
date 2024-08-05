@@ -15,7 +15,7 @@
 	"files": ["dist"],
 	"bin": "dist/bin.js",
 	"scripts": {
-		"dev": "tsx watch src/bin.ts fixtures/schema.ts",
+		"dev": "tsx watch src/bin.ts fixtures/seed.ts",
 		"build": "rm -rf dist && tsc",
 		"test": "tsx --test src/*.test.ts"
 	},

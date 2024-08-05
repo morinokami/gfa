@@ -18,12 +18,12 @@ After setting the API key, install the dependencies in your project:
 npm i -D gen-api zod
 ```
 
-Next, create a schema file. The schema file should export an object that satisfies the `Schema` type from `gen-api`. The schema object should have keys that represent the resources you want to generate. Each resource should have a `shape` key that describes the shape of the resource using a `ZodObject` instance. Resources can also have an optional `prompt` key that describes the prompt to generate the resource. If the resource is a single resource, you can set the `single` key to true.
+Next, create a seed file. The seed file should export an object that satisfies the `Seed` type from `gen-api`. The seed object should have keys that represent the resources you want to generate. Each resource should have a `shape` key that describes the shape of the resource using a `ZodObject` instance. Resources can also have an optional `prompt` key that describes the prompt to generate the resource. If the resource is a single resource, you can set the `single` key to true.
 
-Here is an example schema file:
+Here is an example seed file:
 
 ```ts
-import type { Schema } from "gen-api";
+import type { Seed } from "gen-api";
 import { z } from "zod";
 
 export default {
@@ -50,13 +50,13 @@ export default {
 			name: z.string(),
 		}),
 	},
-} satisfies Schema;
+} satisfies Seed;
 ```
 
 Now you can run the `gen-api` command to serve the generated API:
 
 ```sh
-$ npx gen-api schema.ts
+$ npx gen-api seed.ts
 ✔ Resources generated
 
 Serving API on http://localhost:3000 (Press Ctrl-C to quit)
