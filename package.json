@@ -1,6 +1,6 @@
 {
 	"name": "gen-api",
-	"description": "TODO: LLM-powered json-server",
+	"description": "LLM-powered command-line tool that generates data based on provided schemas and serves it as a REST API",
 	"version": "0.0.1",
 	"type": "module",
 	"author": "Shinya Fujino <shf0811@gmail.com> (https://github.com/morinokami)",
