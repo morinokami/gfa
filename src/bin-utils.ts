@@ -21,7 +21,7 @@ export function parseArgs() {
 	const defaultBasePath = "/api";
 	const defaultRegenerate = false;
 	const help = `
-	Usage: npx gen-api [options] seed.ts
+	Usage: npx gfa [options] seed.ts
 
 	Options:
 	  -p, --port    Port to serve the API on (default: ${defaultPort})
