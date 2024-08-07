@@ -1,5 +1,5 @@
 {
-	"name": "gen-api",
+	"name": "gfa",
 	"description": "LLM-powered command-line tool that generates data based on provided schemas and serves it as a REST API",
 	"version": "0.0.1",
 	"type": "module",
@@ -7,7 +7,7 @@
 	"license": "MIT",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/morinokami/gen-api.git"
+		"url": "git+https://github.com/morinokami/gfa.git"
 	},
 	"keywords": ["api", "ai", "llm"],
 	"packageManager": "pnpm@9.6.0",
