@@ -1,7 +1,7 @@
 {
 	"name": "gfa",
 	"description": "LLM-powered command-line tool that generates data based on provided schemas and serves it as a REST API",
-	"version": "0.0.1",
+	"version": "0.1.0",
 	"type": "module",
 	"author": "Shinya Fujino <shf0811@gmail.com> (https://github.com/morinokami)",
 	"license": "MIT",
@@ -9,10 +9,16 @@
 		"type": "git",
 		"url": "git+https://github.com/morinokami/gfa.git"
 	},
-	"keywords": ["api", "ai", "llm"],
+	"keywords": [
+		"api",
+		"ai",
+		"llm"
+	],
 	"packageManager": "pnpm@9.6.0",
 	"types": "dist/index.d.ts",
-	"files": ["dist"],
+	"files": [
+		"dist"
+	],
 	"bin": "dist/bin.js",
 	"scripts": {
 		"dev": "tsx watch src/bin.ts fixtures/seed.ts",
