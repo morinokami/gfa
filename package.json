@@ -27,7 +27,7 @@
 		"@tsconfig/recommended": "1.0.7",
 		"@types/node": "22.1.0",
 		"knip": "5.27.2",
-		"pkg-pr-new": "0.0.19",
+		"pkg-pr-new": "0.0.20",
 		"tsx": "4.17.0",
 		"typescript": "5.5.4"
 	},
