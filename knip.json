@@ -1,0 +1,6 @@
+{
+	"$schema": "https://unpkg.com/knip@5/schema.json",
+	"entry": ["src/bin.ts", "src/**/*.test.ts"],
+	"project": ["src/**/*.ts", "scripts/**/*.js"],
+	"ignoreDependencies": ["@biomejs/biome", "@changesets/cli", "pkg-pr-new"]
+}

@@ -17,7 +17,8 @@
 	"scripts": {
 		"dev": "tsx watch src/bin.ts fixtures/seed.ts",
 		"build": "rm -rf dist && tsc",
-		"test": "tsx --test src/*.test.ts"
+		"test": "tsx --test src/*.test.ts",
+		"knip": "knip"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.8.3",
@@ -25,6 +26,7 @@
 		"@changesets/cli": "2.27.7",
 		"@tsconfig/recommended": "1.0.7",
 		"@types/node": "22.1.0",
+		"knip": "5.27.2",
 		"pkg-pr-new": "0.0.19",
 		"tsx": "4.16.5",
 		"typescript": "5.5.4"
@@ -39,7 +41,7 @@
 		"meow": "13.2.0",
 		"ora": "8.0.1",
 		"vite": "5.3.5",
-		"zod": "3.23.8"
+		"zod": "^3"
 	},
 	"peerDependencies": {
 		"zod": "^3"
