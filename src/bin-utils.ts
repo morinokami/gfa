@@ -42,6 +42,7 @@ export function parseArgs() {
 	  Anthropic: ${AnthropicModelIds.join(", ")}
 	  OpenAI: ${OpenAIModelIds.join(", ")}
 `;
+
 	const cli = meow(help, {
 		importMeta: import.meta,
 		booleanDefault: undefined,
@@ -56,6 +57,7 @@ export function parseArgs() {
 				type: "string",
 				default: defaultModelId,
 				shortFlag: "m",
+				choices: [...AnthropicModelIds, ...OpenAIModelIds],
 			},
 			basePath: {
 				type: "string",
@@ -78,7 +80,19 @@ export function parseArgs() {
 		process.exit(1);
 	}
 
-	// TODO: Validate modelId and provider
+	if (
+		cli.flags.provider === "anthropic" &&
+		!AnthropicModelIds.includes(cli.flags.modelId as AnthropicModelId)
+	) {
+		console.error("Error: Invalid model ID for Anthropic");
+		process.exit(1);
+	} else if (
+		cli.flags.provider === "openai" &&
+		!OpenAIModelIds.includes(cli.flags.modelId as OpenAIModelId)
+	) {
+		console.error("Error: Invalid model ID for OpenAI");
+		process.exit(1);
+	}
 
 	return {
 		seedPath: cli.input[0],
