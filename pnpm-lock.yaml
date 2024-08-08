@@ -55,7 +55,7 @@ importers:
         specifier: 22.1.0
         version: 22.1.0
       knip:
-        specifier: ^5.27.2
+        specifier: 5.27.2
         version: 5.27.2(@types/node@22.1.0)(typescript@5.5.4)
       pkg-pr-new:
         specifier: 0.0.19
