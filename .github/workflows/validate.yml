@@ -26,6 +26,9 @@ jobs:
       - name: Run Biome check command
         run: pnpm dlx @biomejs/biome check
 
+      - name: Run Knip
+        run: pnpm knip
+
       - name: Test
         run: pnpm run test
 
