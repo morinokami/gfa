@@ -2,4 +2,4 @@
 "gfa": patch
 ---
 
-Enabling Dependabot version updates
+Enable Dependabot version updates
