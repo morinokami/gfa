@@ -9,7 +9,7 @@ importers:
   .:
     dependencies:
       '@ai-sdk/anthropic':
-        specifier: ^0.0.38
+        specifier: 0.0.38
         version: 0.0.38(zod@3.23.8)
       '@ai-sdk/openai':
         specifier: 0.0.40
