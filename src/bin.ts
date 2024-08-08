@@ -13,14 +13,16 @@ import {
 	loadGeneratedResources,
 	loadSeed,
 	parseArgs,
+	readApiKey,
 } from "./bin-utils.js";
 import { createModel } from "./gen.js";
 
 async function main() {
-	const { seedPath, port, modelId, basePath, regenerate } = parseArgs();
-	const apiKey = process.env.OPENAI_API_KEY;
+	const { seedPath, port, modelId, basePath, provider, regenerate } =
+		parseArgs();
+	const apiKey = readApiKey(provider);
 	if (!apiKey) {
-		console.error("Error: OPENAI_API_KEY environment variable must be set");
+		console.error("Error: API key not set");
 		process.exit(1);
 	}
 

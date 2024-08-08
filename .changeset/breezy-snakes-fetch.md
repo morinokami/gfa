@@ -1,0 +1,5 @@
+---
+"gfa": minor
+---
+
+Anthropic support

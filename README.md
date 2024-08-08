@@ -4,7 +4,12 @@
 
 ## Usage
 
-`gfa` currently uses the [OpenAI API](https://openai.com/api/) to generate data. You need to have an API key to use it. Once you have your API key, set it as the environment variable `OPENAI_API_KEY`. You can set the environment variable by using the `export` command, for example:
+`gfa` currently supports the following AI providers for generating data:
+
+- [OpenAI API](https://openai.com/api/)
+- [Anthropic API](https://www.anthropic.com/api)
+
+You need an API key from one of these providers to use `gfa`. Once you have your API key, set it as an environment variable called `OPENAI_API_KEY` or `ANTHROPIC_API_KEY`. You can set the environment variable by using the `export` command. For example:
 
 ```sh
 export OPENAI_API_KEY=your-api-key

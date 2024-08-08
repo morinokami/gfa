@@ -7,7 +7,14 @@ import meow from "meow";
 import { createServer } from "vite";
 
 import { createApi } from "./api.js";
-import { generateMultipleObjects, generateSingleObject } from "./gen.js";
+import {
+	type AnthropicModelId,
+	AnthropicModelIds,
+	type OpenAIModelId,
+	OpenAIModelIds,
+	generateMultipleObjects,
+	generateSingleObject,
+} from "./gen.js";
 import { Seed } from "./index.js";
 
 const __filename = url.fileURLToPath(import.meta.url);
@@ -20,15 +27,22 @@ export function parseArgs() {
 	const defaultModelId = "gpt-4o-mini";
 	const defaultBasePath = "/api";
 	const defaultRegenerate = false;
+	const defaultProvider = "openai";
 	const help = `
 	Usage: npx gfa [options] seed.ts
 
 	Options:
 	  -p, --port    Port to serve the API on (default: ${defaultPort})
-	  -m, --modelId OpenAI model ID to use (default: ${defaultModelId})
+	  -m, --modelId Model ID to use (default: ${defaultModelId})
 	  --basePath    Base path for the API (default: ${defaultBasePath})
+	  --provider    AI provider to use (default: ${defaultProvider})
 	  --regenerate  Regenerate the generated objects (default: ${defaultRegenerate})
+
+	Model IDs:
+	  Anthropic: ${AnthropicModelIds.join(", ")}
+	  OpenAI: ${OpenAIModelIds.join(", ")}
 `;
+
 	const cli = meow(help, {
 		importMeta: import.meta,
 		booleanDefault: undefined,
@@ -43,10 +57,16 @@ export function parseArgs() {
 				type: "string",
 				default: defaultModelId,
 				shortFlag: "m",
+				choices: [...AnthropicModelIds, ...OpenAIModelIds],
 			},
 			basePath: {
 				type: "string",
 				default: defaultBasePath,
+			},
+			provider: {
+				type: "string",
+				default: "openai",
+				choices: ["openai", "anthropic"],
 			},
 			regenerate: {
 				type: "boolean",
@@ -60,13 +80,40 @@ export function parseArgs() {
 		process.exit(1);
 	}
 
+	if (
+		cli.flags.provider === "anthropic" &&
+		!AnthropicModelIds.includes(cli.flags.modelId as AnthropicModelId)
+	) {
+		console.error("Error: Invalid model ID for Anthropic");
+		process.exit(1);
+	} else if (
+		cli.flags.provider === "openai" &&
+		!OpenAIModelIds.includes(cli.flags.modelId as OpenAIModelId)
+	) {
+		console.error("Error: Invalid model ID for OpenAI");
+		process.exit(1);
+	}
+
 	return {
 		seedPath: cli.input[0],
 		port: cli.flags.port,
-		modelId: cli.flags.modelId,
+		modelId: cli.flags.modelId as AnthropicModelId | OpenAIModelId,
 		basePath: cli.flags.basePath,
+		provider: cli.flags.provider as "openai" | "anthropic",
 		regenerate: cli.flags.regenerate,
 	};
+}
+
+export function readApiKey(provider: "openai" | "anthropic") {
+	switch (provider) {
+		case "openai":
+			return process.env.OPENAI_API_KEY;
+		case "anthropic":
+			return process.env.ANTHROPIC_API_KEY;
+		default: {
+			const _: never = provider;
+		}
+	}
 }
 
 export async function loadSeed(path: string) {
