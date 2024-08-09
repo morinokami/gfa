@@ -69,13 +69,13 @@ export async function generateSingleObject({
 	schema,
 	prompt,
 }: GenerateOptions) {
-	const { object } = await generateObject({
+	const { object, usage } = await generateObject({
 		model,
 		schema,
 		prompt,
 	});
 
-	return object;
+	return { result: object, tokenUsage: usage };
 }
 
 export async function generateMultipleObjects({
@@ -83,11 +83,11 @@ export async function generateMultipleObjects({
 	schema,
 	prompt,
 }: GenerateOptions) {
-	const { object } = await generateObject({
+	const { object, usage } = await generateObject({
 		model,
 		schema: z.object({ result: z.array(schema) }),
 		prompt,
 	});
 
-	return object.result;
+	return { result: object.result, tokenUsage: usage };
 }
