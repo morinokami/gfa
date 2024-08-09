@@ -9,22 +9,15 @@
 		"type": "git",
 		"url": "git+https://github.com/morinokami/gfa.git"
 	},
-	"keywords": [
-		"api",
-		"ai",
-		"llm"
-	],
+	"keywords": ["api", "ai", "llm"],
 	"packageManager": "pnpm@9.6.0",
 	"types": "dist/index.d.ts",
-	"files": [
-		"dist"
-	],
+	"files": ["dist"],
 	"bin": "dist/bin.js",
 	"scripts": {
 		"dev": "tsx watch src/bin.ts fixtures/seed.ts",
 		"build": "rm -rf dist && tsc",
-		"test": "tsx --test src/*.test.ts",
-		"knip": "knip"
+		"test": "tsx --test src/*.test.ts"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.8.3",

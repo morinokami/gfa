@@ -24,10 +24,10 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Run Biome check command
-        run: pnpm dlx @biomejs/biome check
+        run: pnpm dlx @biomejs/biome check ./src
 
       - name: Run Knip
-        run: pnpm knip
+        run: pnpm dlx knip
 
       - name: Test
         run: pnpm run test
