@@ -1,6 +1,6 @@
 # gfa
 
-`gfa` (generate-fake-api) is a LLM-powered command-line tool that generates data based on provided schemas and serves it as a REST API. You can think of it as an AI-driven [json-server](https://github.com/typicode/json-server). Just define a seed file with the resources you want to generate, and `gfa` will take care of the rest.
+`gfa` (generate-fake-api) is a LLM-powered command-line tool that generates structured data based on provided schemas and serves it as a REST API. You can think of it as an AI-driven [json-server](https://github.com/typicode/json-server). Just define a seed file with the resources you want to generate, and `gfa` will take care of the rest.
 
 ## Usage
 
@@ -56,11 +56,11 @@ export default {
 } satisfies Seed;
 ```
 
-Now you can run the `gfa` command to serve the generated API:
+Now you can run the `gfa` command to generate resources and serve the API:
 
 ```
 $ npx gfa seed.ts
-✔ Resources generated
+✔ Resources generated (total tokens: 383)
 
 Serving API on http://localhost:3000 (Press Ctrl-C to quit)
 

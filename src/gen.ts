@@ -35,18 +35,13 @@ export type OpenAIModelId = (typeof OpenAIModelIds)[number];
 
 export function createModel(
 	modelId: AnthropicModelId | OpenAIModelId,
-	apiKey: string,
 ): ReturnType<AnthropicProvider | OpenAIProvider> {
 	if (AnthropicModelIds.includes(modelId as AnthropicModelId)) {
-		const anthropic = createAnthropic({
-			apiKey,
-		});
+		const anthropic = createAnthropic({});
 		return anthropic(modelId);
 	}
 
-	const openai = createOpenAI({
-		apiKey,
-	});
+	const openai = createOpenAI({});
 	return openai(modelId, {
 		structuredOutputs: modelId === "gpt-4o-2024-08-06",
 	});

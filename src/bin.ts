@@ -13,21 +13,14 @@ import {
 	loadGeneratedResources,
 	loadSeed,
 	parseArgs,
-	readApiKey,
 } from "./bin-utils.js";
 import { createModel } from "./gen.js";
 
 async function main() {
-	const { seedPath, port, modelId, basePath, provider, regenerate } =
-		parseArgs();
-	const apiKey = readApiKey(provider);
-	if (!apiKey) {
-		console.error("Error: API key not set");
-		process.exit(1);
-	}
+	const { seedPath, port, modelId, basePath, regenerate } = parseArgs();
 
 	const seed = await loadSeed(path.join(process.cwd(), seedPath));
-	const model = createModel(modelId, apiKey);
+	const model = createModel(modelId);
 	if (!generatedFileExists() || regenerate) {
 		const spinner = ora("Generating resources...").start();
 		const usage = await generateResources(seed, model);
