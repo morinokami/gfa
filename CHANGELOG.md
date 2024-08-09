@@ -1,5 +1,13 @@
 # gfa
 
+## 0.1.1
+
+### Patch Changes
+
+- [#22](https://github.com/morinokami/gfa/pull/22) [`7a69b58`](https://github.com/morinokami/gfa/commit/7a69b58f0e389b24a3dbd5f95a7dcbf9d1279ee1) Thanks [@morinokami](https://github.com/morinokami)! - Let ai sdk take care of getting api key
+
+- [#20](https://github.com/morinokami/gfa/pull/20) [`6ae969a`](https://github.com/morinokami/gfa/commit/6ae969a556c7696331c70d40d1fff44faafb2f36) Thanks [@morinokami](https://github.com/morinokami)! - Show total tokens
+
 ## 0.1.0
 
 ### Minor Changes
