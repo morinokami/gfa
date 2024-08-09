@@ -49,8 +49,8 @@ function createMultipleItemEndpoints(
 	const api = new Hono();
 
 	api.get(route, (c) => {
-		const perPage = Number(c.req.query("per_page")) || 10;
 		const page = Number(c.req.query("page")) || 1;
+		const perPage = Number(c.req.query("per_page")) || 10;
 
 		const start = (page - 1) * perPage;
 		const end = start + perPage;
