@@ -103,4 +103,12 @@ $ curl -s http://localhost:3000/api/posts | jq .
     "views": 120
   }
 ]
+curl -s 'http://localhost:3000/api/posts?page=2&per_page=2' | jq .
+[
+  {
+    "id": 3,
+    "title": "Healthy Eating: Tips for a Balanced Diet",
+    "views": 120
+  }
+]
 ```
