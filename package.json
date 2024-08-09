@@ -1,6 +1,6 @@
 {
 	"name": "gfa",
-	"description": "LLM-powered command-line tool that generates structured data based on provided schemas and serves it as a REST API",
+	"description": "LLM-powered command-line tool that generates structured data based on Zod schemas and serves it as a REST API",
 	"version": "0.1.1",
 	"type": "module",
 	"author": "Shinya Fujino <shf0811@gmail.com> (https://github.com/morinokami)",
@@ -9,7 +9,7 @@
 		"type": "git",
 		"url": "git+https://github.com/morinokami/gfa.git"
 	},
-	"keywords": ["api", "ai", "llm"],
+	"keywords": ["api", "ai", "llm", "zod"],
 	"packageManager": "pnpm@9.6.0",
 	"types": "dist/index.d.ts",
 	"files": ["dist"],
