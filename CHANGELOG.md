@@ -1,5 +1,11 @@
 # gfa
 
+## 0.2.0
+
+### Minor Changes
+
+- [#23](https://github.com/morinokami/gfa/pull/23) [`4abe30b`](https://github.com/morinokami/gfa/commit/4abe30b4f4584d639248b6f2f94212e2dfc334e0) Thanks [@morinokami](https://github.com/morinokami)! - Support pagination
+
 ## 0.1.1
 
 ### Patch Changes
