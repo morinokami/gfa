@@ -1,7 +1,7 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 import * as url from "node:url";
-import type { LanguageModel } from "ai";
+import type { CompletionTokenUsage, LanguageModel } from "ai";
 import { Hono } from "hono";
 import meow from "meow";
 import { createServer } from "vite";
@@ -150,6 +150,11 @@ export function generatedFileExists() {
 
 export async function generateResources(seed: Seed, model: LanguageModel) {
 	const generated: Record<string, unknown> = {};
+	const usage: CompletionTokenUsage = {
+		promptTokens: 0,
+		completionTokens: 0,
+		totalTokens: 0,
+	};
 
 	for (const [key, value] of Object.entries(seed)) {
 		const generate = value.single
@@ -160,7 +165,10 @@ export async function generateResources(seed: Seed, model: LanguageModel) {
 			schema: value.schema,
 			prompt: value.prompt,
 		});
-		generated[key] = object;
+		generated[key] = object.result;
+		usage.promptTokens += object.tokenUsage.promptTokens;
+		usage.completionTokens += object.tokenUsage.completionTokens;
+		usage.totalTokens += object.tokenUsage.totalTokens;
 	}
 
 	fs.writeFileSync(
@@ -168,6 +176,8 @@ export async function generateResources(seed: Seed, model: LanguageModel) {
 		JSON.stringify(generated, null, 2),
 		"utf-8",
 	);
+
+	return usage;
 }
 
 export function loadGeneratedResources() {

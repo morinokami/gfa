@@ -30,10 +30,10 @@ async function main() {
 	const model = createModel(modelId, apiKey);
 	if (!generatedFileExists() || regenerate) {
 		const spinner = ora("Generating resources...").start();
-		await generateResources(seed, model);
+		const usage = await generateResources(seed, model);
 		spinner.stopAndPersist({
 			symbol: chalk.green("✔"),
-			text: "Resources generated\n",
+			text: `Resources generated (total tokens: ${usage.totalTokens})\n`,
 		});
 	}
 	const generated = loadGeneratedResources();
