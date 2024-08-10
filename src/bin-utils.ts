@@ -25,7 +25,7 @@ const PREV_SEED_FILE = "prev-seed.json";
 
 export function parseArgs() {
 	const defaultPort = 3000;
-	const defaultModelId = "gpt-4o-mini";
+	const defaultModelId = "gpt-4o-2024-08-06";
 	const defaultBasePath = "/api";
 	const defaultRegenerate = false;
 	const help = `
