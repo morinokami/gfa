@@ -31,8 +31,9 @@ export function parseArgs() {
 	Usage: npx gfa [options] seed.ts
 
 	Options:
-	  -p, --port    Port to serve the API on (default: ${defaultPort})
 	  -m, --modelId Model ID to use (default: ${defaultModelId})
+	  -p, --port    Port to serve the API on (default: ${defaultPort})
+	  -s, --serve   Path to the resources file to serve (default: <system generated file>)
 	  --basePath    Base path for the API (default: ${defaultBasePath})
 	  --regenerate  Regenerate the generated objects (default: ${defaultRegenerate})
 
@@ -46,16 +47,20 @@ export function parseArgs() {
 		booleanDefault: undefined,
 		description: false,
 		flags: {
-			port: {
-				type: "number",
-				default: defaultPort,
-				shortFlag: "p",
-			},
 			modelId: {
 				type: "string",
 				default: defaultModelId,
 				shortFlag: "m",
 				choices: [...AnthropicModelIds, ...OpenAIModelIds],
+			},
+			port: {
+				type: "number",
+				default: defaultPort,
+				shortFlag: "p",
+			},
+			serve: {
+				type: "string",
+				shortFlag: "s",
 			},
 			basePath: {
 				type: "string",
@@ -68,15 +73,17 @@ export function parseArgs() {
 		},
 	});
 
-	if (cli.input.length !== 1) {
+	if (!cli.flags.serve && cli.input.length !== 1) {
+		// Seed file is missing
 		cli.showHelp();
 		process.exit(1);
 	}
 
 	return {
-		seedPath: cli.input[0],
-		port: cli.flags.port,
+		seedPath: cli.input[0] ?? "",
 		modelId: cli.flags.modelId as AnthropicModelId | OpenAIModelId,
+		port: cli.flags.port,
+		serve: cli.flags.serve,
 		basePath: cli.flags.basePath,
 		regenerate: cli.flags.regenerate,
 	};
@@ -146,9 +153,11 @@ export async function generateResources(seed: Seed, model: LanguageModel) {
 	return usage;
 }
 
-export function loadGeneratedResources() {
+export function loadGeneratedResources(customPath?: string) {
 	const generated = fs.readFileSync(
-		path.resolve(__dirname, GENERATED_FILE),
+		customPath
+			? path.join(process.cwd(), customPath)
+			: path.resolve(__dirname, GENERATED_FILE),
 		"utf-8",
 	);
 

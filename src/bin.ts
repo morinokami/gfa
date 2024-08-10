@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import * as path from "node:path";
-import { serve } from "@hono/node-server";
+import * as nodeServer from "@hono/node-server";
 import chalk from "chalk";
 import { showRoutes } from "hono/dev";
 import ora from "ora";
@@ -17,19 +17,23 @@ import {
 import { createModel } from "./gen.js";
 
 async function main() {
-	const { seedPath, port, modelId, basePath, regenerate } = parseArgs();
+	const { seedPath, modelId, port, serve, basePath, regenerate } = parseArgs();
 
-	const seed = await loadSeed(path.join(process.cwd(), seedPath));
-	const model = createModel(modelId);
-	if (!generatedFileExists() || regenerate) {
-		const spinner = ora("Generating resources...").start();
-		const usage = await generateResources(seed, model);
-		spinner.stopAndPersist({
-			symbol: chalk.green("✔"),
-			text: `Resources generated (total tokens: ${usage.totalTokens})\n`,
-		});
+	if (!serve) {
+		// Generate resources
+		const seed = await loadSeed(path.join(process.cwd(), seedPath));
+		const model = createModel(modelId);
+		if (!generatedFileExists() || regenerate) {
+			const spinner = ora("Generating resources...").start();
+			const usage = await generateResources(seed, model);
+			spinner.stopAndPersist({
+				symbol: chalk.green("✔"),
+				text: `Resources generated (total tokens: ${usage.totalTokens})\n`,
+			});
+		}
 	}
-	const generated = loadGeneratedResources();
+
+	const generated = loadGeneratedResources(serve);
 	const app = createApp(generated, basePath);
 
 	console.log(
@@ -38,7 +42,7 @@ async function main() {
 	console.log("Available routes:");
 	showRoutes(app);
 
-	serve({
+	nodeServer.serve({
 		fetch: app.fetch,
 		port,
 	});
