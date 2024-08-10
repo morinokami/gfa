@@ -73,6 +73,12 @@ export function parseArgs() {
 		},
 	});
 
+	if (!cli.flags.serve && cli.input.length !== 1) {
+		// Seed file is missing
+		cli.showHelp();
+		process.exit(1);
+	}
+
 	return {
 		seedPath: cli.input[0] ?? "",
 		modelId: cli.flags.modelId as AnthropicModelId | OpenAIModelId,
