@@ -1,0 +1,15 @@
+{
+	"name": "@gfa-examples/basics",
+	"type": "module",
+	"version": "0.0.1",
+	"private": true,
+	"scripts": {
+		"dev": "gfa seed.ts"
+	},
+	"devDependencies": {
+		"@tsconfig/recommended": "^1.0.7",
+		"gfa": "^0.1.1",
+		"typescript": "^5.5.4",
+		"zod": "^3.23.8"
+	}
+}
