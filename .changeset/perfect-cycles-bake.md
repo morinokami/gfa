@@ -1,5 +1,0 @@
----
-"gfa": minor
----
-
-Support pagination
