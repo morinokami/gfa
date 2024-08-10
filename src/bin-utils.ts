@@ -73,13 +73,8 @@ export function parseArgs() {
 		},
 	});
 
-	if (cli.input.length !== 1) {
-		cli.showHelp();
-		process.exit(1);
-	}
-
 	return {
-		seedPath: cli.input[0],
+		seedPath: cli.input[0] ?? "",
 		modelId: cli.flags.modelId as AnthropicModelId | OpenAIModelId,
 		port: cli.flags.port,
 		serve: cli.flags.serve,
