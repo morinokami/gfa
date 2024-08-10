@@ -21,6 +21,7 @@ const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const GENERATED_FILE = "generated.json";
+const PREV_SEED_FILE = "prev-seed.json";
 
 export function parseArgs() {
 	const defaultPort = 3000;
@@ -117,7 +118,21 @@ export async function loadSeed(path: string) {
 	return parseResult.data;
 }
 
-export function generatedFileExists() {
+export function shouldGenerate(currentSeedString: string) {
+	// Check if the generated file exists
+	if (!generatedFileExists()) {
+		return true;
+	}
+	// Check if the seed has changed since the last generation
+	// TODO: should compare the seed object instead of the string
+	const prevSeedString = fs.readFileSync(
+		path.resolve(__dirname, PREV_SEED_FILE),
+		"utf-8",
+	);
+	return prevSeedString !== currentSeedString;
+}
+
+function generatedFileExists() {
 	return fs.existsSync(path.resolve(__dirname, GENERATED_FILE));
 }
 
@@ -151,6 +166,10 @@ export async function generateResources(seed: Seed, model: LanguageModel) {
 	);
 
 	return usage;
+}
+
+export function saveCurrentSeed(seed: string) {
+	fs.writeFileSync(path.resolve(__dirname, PREV_SEED_FILE), seed, "utf-8");
 }
 
 export function loadGeneratedResources(customPath?: string) {
