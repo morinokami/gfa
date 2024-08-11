@@ -33,10 +33,10 @@ export function parseArgs() {
 
 	Options:
 	  -m, --modelId Model ID to use (default: ${defaultModelId})
+	  --regenerate  Regenerate the generated objects (default: ${defaultRegenerate})
 	  -p, --port    Port to serve the API on (default: ${defaultPort})
 	  -s, --serve   Path to the resources file to serve (default: <system generated file>)
 	  --basePath    Base path for the API (default: ${defaultBasePath})
-	  --regenerate  Regenerate the generated objects (default: ${defaultRegenerate})
 
 	Model IDs:
 	  OpenAI: ${OpenAIModelIds.join(", ")}
