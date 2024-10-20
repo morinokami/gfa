@@ -1,7 +1,7 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 import * as url from "node:url";
-import type { CompletionTokenUsage, LanguageModel } from "ai";
+import type { LanguageModel, LanguageModelUsage } from "ai";
 import { Hono } from "hono";
 import meow from "meow";
 import { createServer } from "vite";
@@ -138,7 +138,7 @@ function generatedFileExists() {
 
 export async function generateResources(seed: Seed, model: LanguageModel) {
 	const generated: Record<string, unknown> = {};
-	const usage: CompletionTokenUsage = {
+	const usage: LanguageModelUsage = {
 		promptTokens: 0,
 		completionTokens: 0,
 		totalTokens: 0,
