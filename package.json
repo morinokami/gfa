@@ -39,7 +39,7 @@
 		"typescript": "5.6.2"
 	},
 	"dependencies": {
-		"@ai-sdk/anthropic": "0.0.39",
+		"@ai-sdk/anthropic": "0.0.51",
 		"@ai-sdk/openai": "0.0.44",
 		"@hono/node-server": "1.12.2",
 		"ai": "3.4.16",
