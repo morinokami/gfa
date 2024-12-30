@@ -48,7 +48,7 @@
 		"json-stable-stringify": "^1.1.1",
 		"meow": "13.2.0",
 		"ora": "8.0.1",
-		"vite": "5.4.8",
+		"vite": "6.0.6",
 		"zod": "3.23.8"
 	},
 	"peerDependencies": {
